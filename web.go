@@ -30,9 +30,6 @@ func response(c net.Conn, code string, title string, path string, server string,
 }
 
 func consumeRequest(c net.Conn, path string, arguments []string) {
-  log.Printf(path)
-  log.Printf(strings.Join(arguments, "&"))
-
   writeWithErrorLog(c, "/\r\n")
   response(c, "i", "Tacos are great!", "null", "(FALSE)", "0")
   response(c, "i", "", "null", "(FALSE)", "0")
@@ -46,8 +43,10 @@ func extractRequest(c net.Conn) (string, []string, error)  {
   buf := make([]byte, 4096)
 
   n, err := c.Read(buf)
+  log.Printf("Read %v bytes", n)
+
   if (err != nil || n == 0) {
-    log.Printf(string(buf))
+    log.Fatal("Read error in %v", buf)
     return "", nil, err
   }
 
@@ -71,17 +70,23 @@ func handleConnection(c net.Conn) {
 
 func listenOrDie(port string) (net.Listener) {
   ln, err := net.Listen("tcp", ":" + port)
+
   if err != nil {
     panic(err)
   }
+
   return ln
 }
 
-func acceptOrDie(ln net.Listener) (net.Conn) {
+func acceptOrWhatever(ln net.Listener) (net.Conn) {
   conn, err := ln.Accept()
+
   if err != nil {
     log.Printf("Hit accept error %v", err)
+  } else {
+    log.Printf("Connection from %v opened.", conn.RemoteAddr())
   }
+
   return conn
 }
 
@@ -89,10 +94,10 @@ func main() {
   port := os.Getenv("PORT")
   ln := listenOrDie(port)
 
-  log.Printf("Server open on localhost: %v", port)
+  log.Printf("Listening on gopher://localhost:%v", port)
 
   for {
-    conn := acceptOrDie(ln)
+    conn := acceptOrWhatever(ln)
     if conn != nil {
       go handleConnection(conn)
     }
