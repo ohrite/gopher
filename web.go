@@ -45,7 +45,7 @@ func extractRequest(c net.Conn) (string, []string, error)  {
 
   n, err := c.Read(buf)
   if (err != nil || n == 0) {
-    log.Printf(buf)
+    log.Printf(string(buf))
     return "", nil, err
   }
 
