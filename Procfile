@@ -1,1 +1,1 @@
-web: minifast-gopher
+web: go run web.go
