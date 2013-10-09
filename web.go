@@ -58,8 +58,7 @@ func handleConnection(c net.Conn) {
   path, arguments, err := extractRequest(c)
 
   if (err != nil) {
-    log.Printf("Hit request error")
-    log.Fatal(err)
+    log.Fatal("Request error: %v", err)
   } else {
     consumeRequest(c, path, arguments)
   }
