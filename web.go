@@ -71,14 +71,14 @@ func main() {
   log.Printf("Server open on localhost:" + port)
 
   if err != nil {
-    log.Fatal(err)
+    panic(err)
   }
 
   for {
     conn, err := ln.Accept()
 
     if err != nil {
-      log.Println(err)
+      panic(err)
       continue
     }
 
