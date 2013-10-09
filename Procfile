@@ -1,1 +1,1 @@
-web: minifast-gopher
+web: bin/minifast-gopher
