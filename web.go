@@ -30,7 +30,9 @@ func response(c net.Conn, code string, title string, path string, server string,
 }
 
 func consumeRequest(c net.Conn, path string, arguments []string) {
-  writeWithErrorLog(c, "/\r\n")
+  log.Printf("Path: %v", path)
+  log.Printf("Arguments: %v", arguments)
+  writeWithErrorLog(c, "GET /\r\n")
   response(c, "i", "Tacos are great!", "null", "(FALSE)", "0")
   response(c, "i", "", "null", "(FALSE)", "0")
   response(c, "i", "", "null", "(FALSE)", "0")
@@ -43,13 +45,11 @@ func extractRequest(c net.Conn) (string, []string, error)  {
   buf := make([]byte, 4096)
 
   n, err := c.Read(buf)
-
-  log.Printf("Read %v bytes", n)
   if err != nil {
-    log.Printf("Read error: %v", err)
     return "", nil, err
   }
 
+  log.Printf("Read %v bytes", n)
   parts := strings.Split(string(buf), "\t")
   return parts[0], parts[1:], nil
 }
