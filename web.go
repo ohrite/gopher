@@ -45,7 +45,8 @@ func extractRequest(c net.Conn) (string, []string, error)  {
 
   n, err := c.Read(buf)
   if (err != nil || n == 0) {
-      return "", nil, err
+    log.Printf(buf)
+    return "", nil, err
   }
 
   parts := strings.Split(string(buf), "\t")
