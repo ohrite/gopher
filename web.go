@@ -7,6 +7,8 @@ import (
   "strings"
 )
 
+import _ "github.com/joho/godotenv/autoload"
+
 func writeWithErrorLog(c net.Conn, data string) {
   _, err := c.Write([]byte(data))
   if (err != nil) {
@@ -67,32 +69,32 @@ func handleConnection(c net.Conn) {
   log.Printf("Connection from %v closed.", c.RemoteAddr())
 }
 
-func main() {
-  port := os.Getenv("PORT")
-
-  if (len(port) == 0) {
-    port = "7070"
-  }
-
+func listenOrDie(port string) (net.Listener) {
   ln, err := net.Listen("tcp", ":" + port)
-  log.Printf("Server open on localhost:" + port)
-
   if err != nil {
-    log.Printf("Hit listen error")
     panic(err)
   }
+  return ln
+}
+
+func acceptOrDie(ln net.Listener) (net.Conn) {
+  conn, err := ln.Accept()
+  if err != nil {
+    log.Printf("Hit accept error %v", err)
+  }
+  return conn
+}
+
+func main() {
+  port := os.Getenv("PORT")
+  ln := listenOrDie(port)
+
+  log.Printf("Server open on localhost: %v", port)
 
   for {
-    conn, err := ln.Accept()
-
-    if err != nil {
-      log.Printf("Hit accept error")
-      panic(err)
-      continue
+    conn := acceptOrDie(ln)
+    if conn != nil {
+      go handleConnection(conn)
     }
-
-    log.Printf("After accept error")
-
-    go handleConnection(conn)
   }
 }
