@@ -20,7 +20,7 @@ func writeWithTab(c net.Conn, data string) {
   writeWithErrorLog(c, data + "\t")
 }
 
-func response(c net.Conn, code string, title string, path string, server string, port string) {
+func writeGopherResponse(c net.Conn, code string, title string, path string, server string, port string) {
   writeWithErrorLog(c, code)
   writeWithTab(c, title)
   writeWithTab(c, path)
@@ -32,13 +32,13 @@ func response(c net.Conn, code string, title string, path string, server string,
 func consumeRequest(c net.Conn, path string, arguments []string) {
   log.Printf("Path: %v", path)
   log.Printf("Arguments: %v", arguments)
-  writeWithErrorLog(c, "GET /\r\n")
-  response(c, "i", "Tacos are great!", "null", "(FALSE)", "0")
-  response(c, "i", "", "null", "(FALSE)", "0")
-  response(c, "i", "", "null", "(FALSE)", "0")
-  response(c, "i", "I really like them.", "null", "(FALSE)", "0")
-  response(c, "i", "You are at: " + path, "null", "(FALSE)", "0")
-  writeWithErrorLog(c, ".\r\n")
+  writeWithErrorLog(c, "HTTP/1.1 200 OK\r\n\r\n")
+  writeGopherResponse(c, "i", "Tacos are great!", "null", "(FALSE)", "0")
+  writeGopherResponse(c, "i", "", "null", "(FALSE)", "0")
+  writeGopherResponse(c, "i", "", "null", "(FALSE)", "0")
+  writeGopherResponse(c, "i", "I really like them.", "null", "(FALSE)", "0")
+  writeGopherResponse(c, "i", "You are at: " + path, "null", "(FALSE)", "0")
+  writeWithErrorLog(c, ".\r\n\r\n")
 }
 
 func extractRequest(c net.Conn) (string, []string, error)  {
