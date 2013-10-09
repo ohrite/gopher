@@ -45,7 +45,7 @@ func extractRequest(c net.Conn) (string, []string, error)  {
   n, err := c.Read(buf)
   log.Printf("Read %v bytes", n)
   if err != nil {
-    log.Fatal("Read error in %v", buf)
+    log.Fatal("Read error: %v", err)
     return "", nil, err
   }
 
