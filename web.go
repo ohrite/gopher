@@ -44,10 +44,14 @@ func extractRequest(c net.Conn) (string, []string, error)  {
 
   n, err := c.Read(buf)
   log.Printf("Read %v bytes", n)
-
-  if (err != nil || n == 0) {
+  if err != nil {
     log.Fatal("Read error in %v", buf)
     return "", nil, err
+  }
+
+  if n == 0 {
+    log.Printf("Got null request")
+    return "", nil, nil
   }
 
   parts := strings.Split(string(buf), "\t")
