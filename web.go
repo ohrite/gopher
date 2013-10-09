@@ -44,11 +44,6 @@ func extractRequest(c net.Conn) (string, []string, error)  {
 
   n, err := c.Read(buf)
 
-  if n == 0 {
-    log.Printf("Got empty request")
-    return "", nil, nil
-  }
-
   log.Printf("Read %v bytes", n)
   if err != nil {
     log.Printf("Read error: %v", err)
@@ -63,7 +58,7 @@ func handleConnection(c net.Conn) {
   path, arguments, err := extractRequest(c)
 
   if (err != nil) {
-    log.Fatal("Request error: %v", err)
+    log.Printf("Request error: %v", err)
   } else {
     consumeRequest(c, path, arguments)
   }
