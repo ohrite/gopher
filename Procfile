@@ -1,1 +1,1 @@
-web: ./minifast-gopher -port
+web: minifast-gopher
