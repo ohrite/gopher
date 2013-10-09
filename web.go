@@ -71,6 +71,7 @@ func main() {
   log.Printf("Server open on localhost:" + port)
 
   if err != nil {
+    log.Printf("Hit listen error")
     panic(err)
   }
 
@@ -78,9 +79,12 @@ func main() {
     conn, err := ln.Accept()
 
     if err != nil {
+      log.Printf("Hit accept error")
       panic(err)
       continue
     }
+
+    log.Printf("After accept error")
 
     go handleConnection(conn)
   }
