@@ -40,22 +40,28 @@ func consumeRequest(c net.Conn, path string, arguments []string) {
   writeWithErrorLog(c, ".\r\n")
 }
 
-func extractRequest(c net.Conn) (string, []string)  {
+func extractRequest(c net.Conn) (string, []string, error)  {
   buf := make([]byte, 4096)
 
   n, err := c.Read(buf)
   if (err != nil || n == 0) {
-      log.Fatal(err)
-      c.Close()
+      return nil, nil, err
   }
 
   parts := strings.Split(string(buf), "\t")
-  return parts[0], parts[1:]
+  return parts[0], parts[1:], nil
 }
 
 func handleConnection(c net.Conn) {
-  path, arguments := extractRequest(c)
-  consumeRequest(c, path, arguments)
+  path, arguments, err := extractRequest(c)
+
+  if (err != nil) {
+    log.Printf("Hit request error")
+    log.Fatal(err)
+  } else {
+    consumeRequest(c, path, arguments)
+  }
+
   c.Close()
   log.Printf("Connection from %v closed.", c.RemoteAddr())
 }
