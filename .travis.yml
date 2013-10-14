@@ -3,5 +3,9 @@ go:
  - 1.1
  - release
 
+before_script:
+ - go get github.com/onsi/ginkgo
+ - go get github.com/onsi/gomega
+
 script:
  - go test -v
