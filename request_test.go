@@ -1,7 +1,7 @@
 package gopher_test
 
 import (
-  . "github.com/minifast/gopher"
+  . "github.com/ohrite/gopher"
   . "github.com/onsi/ginkgo"
   . "github.com/onsi/gomega"
 
