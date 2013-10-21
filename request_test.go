@@ -19,15 +19,16 @@ var _ = Describe("Request", func() {
 
   Describe("NewRequest()", func() {
     var (
-      url url.URL
+      urlObj *url.URL
     )
 
     BeforeEach(func() {
-      request = NewRequest(url, "hey it's a body")
+      urlObj = &url.URL{}
+      request = NewRequest(urlObj, "hey it's a body")
     })
 
     It("sets the url", func() {
-      Expect(request.URL).To(Equal(url))
+      Expect(request.URL).To(Equal(urlObj))
     })
 
     It("sets the body", func() {
@@ -84,16 +85,16 @@ var _ = Describe("Request", func() {
 
   Describe("ExtractURLAndBody()", func() {
     var (
-      outputURL url.URL
+      urlObj *url.URL
       outputBody string
     )
 
     BeforeEach(func() {
-      outputURL, outputBody = ExtractURLAndBody("/steaks\toh\tfine&ok?")
+      urlObj, outputBody = ExtractURLAndBody("/steaks\toh\tfine&ok?")
     })
 
     It("sets the path", func() {
-      Expect(outputURL.Path).To(Equal("/steaks"))
+      Expect(urlObj.Path).To(Equal("/steaks"))
     })
 
     It("sets the body", func() {

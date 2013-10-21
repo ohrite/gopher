@@ -11,12 +11,17 @@ type Server struct {
   handler func(net.Conn, *Request)
 }
 
+func NewServer(address string) *Server {
+  return &Server{
+    Address: address,
+  }
+}
+
 func (server *Server) URL() *url.URL {
-  url := url.URL{
+  return &url.URL{
     Host: server.Address,
     Scheme: "gopher",
   }
-  return &url
 }
 
 func (server *Server) ListenAndServe(handler func(net.Conn, *Request)) (error) {
@@ -51,9 +56,9 @@ func (server *Server) Accept(listener net.Listener) (error) {
 func (server *Server) HandleConnection(connection net.Conn) {
   request, err := server.ConnectRequest(connection)
   if err == nil {
+    defer connection.Close()
     server.HandleRequest(connection, request)
   }
-  connection.Close()
 }
 
 func (server *Server) ConnectRequest(connection net.Conn) (*Request, error) {
@@ -61,6 +66,5 @@ func (server *Server) ConnectRequest(connection net.Conn) (*Request, error) {
 }
 
 func (server *Server) HandleRequest(connection net.Conn, request *Request) {
-  defer connection.Close()
   server.handler(connection, request)
 }

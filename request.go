@@ -8,11 +8,11 @@ import (
 )
 
 type Request struct {
-  URL url.URL
+  URL *url.URL
   Body string
 }
 
-func NewRequest(url url.URL, body string) (request *Request) {
+func NewRequest(url *url.URL, body string) (request *Request) {
   return &Request{
     URL: url,
     Body: body,
@@ -36,9 +36,10 @@ func ReadRequestString(buffer *bufio.Reader) (string, error) {
   return reader.ReadLine()
 }
 
-func ExtractURLAndBody(requestString string) (url url.URL, body string) {
-  url.Path, body = ParseRequestString(requestString)
-  return url, body
+func ExtractURLAndBody(requestString string) (*url.URL, string) {
+  path, body := ParseRequestString(requestString)
+  urlObj := &url.URL{Path: path}
+  return urlObj, body
 }
 
 func ParseRequestString(requestString string) (string, body string) {
