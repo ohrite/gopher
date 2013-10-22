@@ -39,9 +39,10 @@ func (server *Server) Serve(listener net.Listener) (err error) {
   for {
     err = server.Accept(listener)
     if err != nil {
-      return err
+      break
     }
   }
+  return err
 }
 
 func (server *Server) Accept(listener net.Listener) (error) {
